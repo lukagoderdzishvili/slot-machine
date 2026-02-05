@@ -1,19 +1,17 @@
-import Phaser from 'phaser';
 import { gameData } from '@/data';
 import BaseScene from './BaseScene';
+import { Board } from '@/components/Board';
  
 export default class MainScene extends BaseScene {
+    private _board!: Board;
+    
     constructor() {
         super({ key: 'MainScene' });
     }
 
-    create() {
+    create(): void {
         this.playEnterTransition();
-
         
-        const testBoard: Phaser.GameObjects.Sprite = this.add.sprite(gameData.width / 2, gameData.height / 3, 'board-default')
-        .setSize(631, 365)
-        .setDisplaySize(631, 365)
-        .setScale(0.9);
+        this._board = new Board(this, gameData.width / 2, gameData.height / 2);
     }
 }

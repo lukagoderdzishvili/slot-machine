@@ -11,9 +11,9 @@ export default class PreloadScene extends BaseScene {
         super('PreloadScene');
     }
 
-    create() {
+    create(): void {
         this.playEnterTransition();
-        
+
         this._container = this.add.container(0, 0);
 
         this._titleText = this.make.text({...config.titleTextConfig});
