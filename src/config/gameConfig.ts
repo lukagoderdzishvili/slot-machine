@@ -1,7 +1,7 @@
 import Phaser from 'phaser';
-import PreloadScene from '../scenes/PreloadScene';
-import MainScene from '../scenes/MainScene';
-import { gameData } from '../data';
+import PreloadScene from '@/scenes/PreloadScene';
+import MainScene from '@/scenes/MainScene';
+import { gameData } from '@/data';
 
 const config: Phaser.Types.Core.GameConfig = {
     width: gameData.width,

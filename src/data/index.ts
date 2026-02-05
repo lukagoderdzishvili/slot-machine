@@ -1,4 +1,4 @@
-import { GameData } from "../types/game";
+import { GameData } from "@/types/game";
 
 export const gameData: GameData & Phaser.Types.Core.GameConfig = {
     width: 800,

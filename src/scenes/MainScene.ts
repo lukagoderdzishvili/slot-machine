@@ -1,6 +1,6 @@
 import Phaser from 'phaser';
-import { gameData } from '../data';
-
+import { gameData } from '@/data';
+ 
 export default class MainScene extends Phaser.Scene {
     constructor() {
         super({ key: 'MainScene' });

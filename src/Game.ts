@@ -1,5 +1,5 @@
 import Phaser from 'phaser';
-import gameConfig from './config/gameConfig';
+import gameConfig from '@/config/gameConfig';
 
 export default class Game {
     private _game: Phaser.Game;
