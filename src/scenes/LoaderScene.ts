@@ -26,6 +26,8 @@ export default class LoaderScene extends BaseScene {
         this.load.image('board-default', '/assets/images/board-default.png');
         this.load.image('board-active', '/assets/images/board-active.png');
         this.load.image('symbol1', '/assets/images/symbol1.png');
+        this.load.image('symbol2', '/assets/images/symbol2.png');
+        this.load.image('symbol3', '/assets/images/symbol3.png');
 
 
         this.load.on('progress', (value: number) => {
