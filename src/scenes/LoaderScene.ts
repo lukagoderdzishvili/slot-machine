@@ -1,8 +1,10 @@
 import config from '@/config/loaderSceneConfig';
 import { gameData } from '@/data';
 import Phaser from 'phaser';
+import BaseScene from './BaseScene';
 
-export default class LoaderScene extends Phaser.Scene {
+export default class LoaderScene extends BaseScene {
+    private _container!: Phaser.GameObjects.Container;
     private _progressBar!: Phaser.GameObjects.Graphics;
     private _progressBox!: Phaser.GameObjects.Graphics;
     private _LoadingText!: Phaser.GameObjects.Text;
@@ -13,20 +15,13 @@ export default class LoaderScene extends Phaser.Scene {
     }
 
     preload(): void {
-        this._progressBox = this.add.graphics()
-            .fillStyle(config.progressBoxConfig.backgroundColor, config.progressBoxConfig.backgroundAlpha)
-            .fillRect(config.progressBoxConfig.x, config.progressBoxConfig.y, config.progressBoxConfig.width, config.progressBoxConfig.height);
-        this._progressBar = this.add.graphics();
+        this._container = this.add.container(0, 0);
 
+        this._progressBox = this.make.graphics({...config.progressBoxConfig});
+        this._progressBar = this.make.graphics();
 
-        
-        this._LoadingText = this.add
-            .text(config.loadingTextConfig.x, config.loadingTextConfig.y, config.loadingTextConfig.text, config.loadingTextConfig.style)
-            .setOrigin(config.loadingTextConfig.origin.x, config.loadingTextConfig.origin.y)
-            .setResolution(config.loadingTextConfig.resolution);
-
-        this._percentText = this.add.text(config.percentTextConfig.x, config.percentTextConfig.y, config.percentTextConfig.text, config.percentTextConfig.style)
-            .setOrigin(config.percentTextConfig.origin.x, config.percentTextConfig.origin.y);
+        this._LoadingText = this.make.text({...config.loadingTextConfig});
+        this._percentText = this.make.text({...config.percentTextConfig});
 
         this.load.image('board-default', '/assets/images/board-default.png');
         this.load.image('board-active', '/assets/images/board-active.png');
@@ -41,15 +36,10 @@ export default class LoaderScene extends Phaser.Scene {
             this._percentText.setText(`${Math.floor(value * 100)}%`);
         });
 
-        this.load.on('complete', () => {
-            this._progressBar.destroy();
-            this._progressBox.destroy();
-            this._LoadingText.destroy();
-            this._percentText.destroy();
-        });
+        this._container.add([this._progressBox, this._progressBar, this._LoadingText, this._percentText]);
     }
 
     create(): void {
-        this.scene.start('MainScene');
+        this.fadeToScene('MainScene', 750, () => this._container.destroy(true));
     }
 }

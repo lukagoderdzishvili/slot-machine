@@ -1,7 +1,9 @@
+import BaseScene from './BaseScene';
 import Phaser from 'phaser';
 import config from '@/config/preloadSceneConfig';
 
-export default class PreloadScene extends Phaser.Scene {
+export default class PreloadScene extends BaseScene {
+    private _container!: Phaser.GameObjects.Container;
     private _titleText!: Phaser.GameObjects.Text;
     private _startButton!: Phaser.GameObjects.Text;
 
@@ -10,26 +12,26 @@ export default class PreloadScene extends Phaser.Scene {
     }
 
     create() {
-        this._titleText = this.add
-            .text(config.titleTextConfig.x, config.titleTextConfig.y, config.titleTextConfig.text, config.titleTextConfig.style)
-            .setResolution(config.titleTextConfig.resolution)
-            .setOrigin(config.titleTextConfig.origin.x, config.titleTextConfig.origin.y);
-
-        this._startButton = this.add
-            .text(config.startButtonConfig.x, config.startButtonConfig.y, config.startButtonConfig.text, config.startButtonConfig.style)
-            .setResolution(config.startButtonConfig.resolution)
-            .setOrigin(config.startButtonConfig.origin.x, config.startButtonConfig.origin.y)
-            .setPadding(config.startButtonConfig.padding ?? 0)
-            .setBackgroundColor(config.startButtonConfig.backgroundColor ?? 'transparent')
-            .setInteractive({ useHandCursor: true });
+        this.playEnterTransition();
         
+        this._container = this.add.container(0, 0);
+
+        this._titleText = this.make.text({...config.titleTextConfig});
+
+        const { padding, backgroundColor, ...startButtonConfig } = config.startButtonConfig;
+        this._startButton = this.make
+            .text({...startButtonConfig})
+            .setPadding(padding ?? 0, padding ?? 0)
+            .setBackgroundColor(backgroundColor ?? 'transparent')
+            .setInteractive({ useHandCursor: true });
+
+        this._container.add([this._titleText, this._startButton]);
+
 
         this._startButton.on('pointerdown', this._startGame, this);
     }
 
-    private _startGame() {
-        this._titleText.destroy();
-        this._startButton.destroy();
-        this.scene.start('LoaderScene');
+    private _startGame(): void {
+        this.fadeToScene('LoaderScene', 500, () => this._container.destroy(true));
     }
 }
