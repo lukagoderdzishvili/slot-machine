@@ -23,6 +23,7 @@ export default class LoaderScene extends BaseScene {
         this._LoadingText = this.make.text({...config.loadingTextConfig});
         this._percentText = this.make.text({...config.percentTextConfig});
 
+        this.load.image('background', '/assets/images/background.jpg');
         this.load.image('board-default', '/assets/images/board-default.png');
         this.load.image('board-active', '/assets/images/board-active.png');
         this.load.image('symbol1', '/assets/images/symbol1.png');
