@@ -1,7 +1,7 @@
 import { gameData } from '@/data';
 import BaseScene from './BaseScene';
 import config from '@/config/mainSceneConfig';
-import { Board } from '@/components/Board';
+import Board from '@/components/Board';
  
 export default class MainScene extends BaseScene {
     private _board!: Board;
