@@ -1,4 +1,3 @@
-import { gameData } from "@/data";
 import { SpriteConfig } from "@/types/sprite";
 import { CENTER_X, CENTER_Y } from "../constants";
 

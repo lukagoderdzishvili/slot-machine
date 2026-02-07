@@ -1,5 +1,4 @@
-import { gameData } from "@/data";
-import { CENTER_Y } from "../constants";
+import { ANIMATION_DURATION, CENTER_Y } from "../constants";
 
 interface ReelConfig {
     width: number;
@@ -27,8 +26,8 @@ const reelConfig: ReelConfig = {
         height: 154,
         y: CENTER_Y - 156
     },
-    minSpinLoopsCount: 3,
-    spinStepDuration: 0.3
+    minSpinLoopsCount: 2,
+    spinStepDuration: ANIMATION_DURATION
 };
 
 export { reelConfig };

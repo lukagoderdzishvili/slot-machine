@@ -1,4 +1,3 @@
-import { gameData } from "@/data";
 import { TextConfig } from "@/types/text";
 import { CENTER_X, CENTER_Y } from "../constants";
 

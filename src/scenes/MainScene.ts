@@ -2,6 +2,8 @@ import { gameData } from '@/data';
 import BaseScene from './BaseScene';
 import * as config from '@/config/mainScene';
 import Board from '@/components/Board';
+import { api } from '@/services/api';
+import { GameState, SpinResult } from '@/services/gameServer/gameServer.types';
  
 export default class MainScene extends BaseScene {
     private _board!: Board;
@@ -10,12 +12,43 @@ export default class MainScene extends BaseScene {
     
     constructor() {
         super({ key: 'MainScene' });
+
+        document.addEventListener("keydown", (event: KeyboardEvent) => {
+            if (event.code === "Space") {
+                this._playGame();
+            }
+        });
     }
 
     create(): void {
         this._createBackground();
         this._createBoard();
         this.playEnterTransition();
+
+        this._initGameState();
+    }
+
+    private async _initGameState(): Promise<void> {
+        try {
+            const initialState: GameState = await api.getInitialState();
+
+            this._board.setReelsInitialSymbols(initialState.reels);
+
+        } catch (error: unknown) {
+            console.error('Failed to fetch initial game state', error);
+        }
+    }
+
+    private async _playGame(): Promise<void> {
+        try {
+            this._board.play();
+            const spinResult: SpinResult = await api.playGame();
+            this._board.setSpinResult(spinResult);
+
+
+        } catch (error: unknown) {
+            console.error('Failed to perform spin', error);
+        }
     }
 
     private _createBackground(): void {
