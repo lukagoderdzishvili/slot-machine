@@ -1,7 +1,8 @@
-import config from '@/config/loaderSceneConfig';
+import * as config from '@/config/loaderScene';
 import { gameData } from '@/data';
 import Phaser from 'phaser';
 import BaseScene from './BaseScene';
+import { CENTER_X } from '@/config/constants';
 
 export default class LoaderScene extends BaseScene {
     private _container!: Phaser.GameObjects.Container;
@@ -34,7 +35,7 @@ export default class LoaderScene extends BaseScene {
         this.load.on('progress', (value: number) => {
             this._progressBar.clear();
             this._progressBar.fillStyle(config.progressBarConfig.backgroundColor, config.progressBarConfig.backgroundAlpha);
-            this._progressBar.fillRect(config.progressBarConfig.x, config.progressBarConfig.y, (gameData.width / 2 - 20) * value, config.progressBarConfig.height);
+            this._progressBar.fillRect(config.progressBarConfig.x, config.progressBarConfig.y, (CENTER_X - 20) * value, config.progressBarConfig.height);
 
             this._percentText.setText(`${Math.floor(value * 100)}%`);
         });

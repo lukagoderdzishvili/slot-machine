@@ -1,8 +1,9 @@
-import { gameData } from "@/data";
 import { SpinState } from "@/types/spin";
-import config from "@/config/mainSceneConfig";
+import * as config from "@/config/mainScene";
 import Symbol from "./Symbol";
 import gsap from "gsap";
+import { CENTER_X, SymbolKey } from "@/config/constants";
+import { SYMBOLS } from "@/config/constants";
 
 export default class Reel extends Phaser.GameObjects.Container {
     private _symbols: Symbol[] = [];
@@ -45,7 +46,7 @@ export default class Reel extends Phaser.GameObjects.Container {
     private _spinStep(spinState: SpinState): void {
         gsap.to(this, {
             y: `+=${config.symbolConfig.height * 1.5}`,
-            duration: 0.3,
+            duration: config.reelConfig.spinStepDuration,
             ease: "linear",
             onUpdate: () => this._updateSymbols(spinState),
             onComplete: () => {
@@ -61,10 +62,8 @@ export default class Reel extends Phaser.GameObjects.Container {
     }
 
     private _initializeSymbols(): void {
-        const posX = config.reelConfig.width / 2;
-
-        const firstSymbol = new Symbol(this.scene, posX, -70, "symbol1");
-        const secondSymbol = new Symbol(this.scene, posX, 72, "symbol2");
+        const firstSymbol: Symbol = new Symbol(this.scene, config.reelConfig.width / 2,  config.reelConfig.shapeMask.y / 2 - (config.symbolConfig.height * 1.5), this._getRandomSymbol());
+        const secondSymbol: Symbol = new Symbol(this.scene, config.reelConfig.width / 2, config.reelConfig.shapeMask.y / 2, this._getRandomSymbol());
 
         this._symbols.push(firstSymbol, secondSymbol);
         this.add(this._symbols);
@@ -72,16 +71,16 @@ export default class Reel extends Phaser.GameObjects.Container {
 
     // FOR TESTING
     private _updateSymbols(spinState: SpinState): void {
-        const firstSymbol = this._symbols[0];
-        const secondSymbol = this._symbols[1];
+        const firstSymbol: Symbol = this._symbols[0];
+        const secondSymbol: Symbol = this._symbols[1];
         
-        if (secondSymbol.y + this.y >= 72 + (config.symbolConfig.height * 1.5) / 2) {
+        if (secondSymbol.y + this.y >=  config.reelConfig.shapeMask.y / 2 + (config.symbolConfig.height * 1.5) / 2) {
             secondSymbol.y = firstSymbol.y - (config.symbolConfig.height * 1.5);
 
-            const nextTexture =
+            const nextTexture: string =
                 spinState.current < spinState.total - 1
                     ? this._getRandomSymbol()
-                    : config.reelConfig.symbols[spinState.resultIndex];
+                    : SYMBOLS[spinState.resultIndex];
 
             secondSymbol.setTexture(nextTexture);
 
@@ -90,19 +89,19 @@ export default class Reel extends Phaser.GameObjects.Container {
     }
 
     private _finishSpin(finalIndex: number): void {
-        const secondSymbol = this._symbols[1];
-        secondSymbol.setTexture(config.reelConfig.symbols[finalIndex]);
+        const secondSymbol: Symbol = this._symbols[1];
+        secondSymbol.setTexture(SYMBOLS[finalIndex]);
         this._isSpinning = false;
     }
 
-    private _getRandomSymbol(): string {
-        return Phaser.Math.RND.pick(config.reelConfig.symbols);
+    private _getRandomSymbol(): SymbolKey {
+        return Phaser.Math.RND.pick([...SYMBOLS]);
     }
 
     private _createMask(): void {
         this._maskShape = this.scene.add.graphics();
         this._maskShape.fillRect(
-            gameData.width / 2 + this.x,
+            CENTER_X + this.x,
             config.reelConfig.shapeMask.y,
             config.reelConfig.shapeMask.width,
             config.reelConfig.shapeMask.height

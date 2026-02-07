@@ -1,6 +1,6 @@
 import BaseScene from './BaseScene';
 import Phaser from 'phaser';
-import config from '@/config/preloadSceneConfig';
+import  * as config from '@/config/preloadScene';
 
 export default class PreloadScene extends BaseScene {
     private _container!: Phaser.GameObjects.Container;
