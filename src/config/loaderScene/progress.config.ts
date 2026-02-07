@@ -1,5 +1,5 @@
 import { gameData } from "@/data";
-import { GraphicObjectConfig } from "@/types/graphicObject";
+import { GraphicObjectConfig } from "@/types/graphicObject.type";
 import { CENTER_Y } from "../constants";
 
 export const progressBoxConfig: GraphicObjectConfig = {

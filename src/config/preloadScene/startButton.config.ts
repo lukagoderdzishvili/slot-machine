@@ -1,5 +1,5 @@
 import { gameData } from "@/data";
-import { TextButtonConfig } from "@/types/text";
+import { TextButtonConfig } from "@/types/text.type";
 import { CENTER_X, CENTER_Y } from "../constants";
 
 const startButtonConfig: TextButtonConfig = {

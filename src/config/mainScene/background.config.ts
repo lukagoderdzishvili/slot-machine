@@ -1,13 +1,13 @@
 import { gameData } from "@/data"
-import { RectangleConfig } from "@/types/rectangle"
-import { SpriteConfig } from "@/types/sprite"
+import { RectangleConfig } from "@/types/rectangle.type"
+import { SpriteConfig } from "@/types/sprite.type"
 import { CENTER_X, CENTER_Y } from "../constants"
 
 const backgroundConfig: SpriteConfig = {
     x: CENTER_X,
     y: CENTER_Y,
-    key: "background",
-    frame: 'background',
+    key: "images",
+    frame: 'background.jpg',
     displayWidth: gameData.width,
     displayHeight: gameData.height
 }

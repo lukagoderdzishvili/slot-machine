@@ -1,19 +1,5 @@
+import { ReelConfig } from "@/types/reelConfig.type";
 import { ANIMATION_DURATION, CENTER_Y } from "../constants";
-
-interface ReelConfig {
-    width: number;
-    height: number;
-    offsetX: number;
-    x: number;
-    y: number;
-    shapeMask: {
-        width: number;
-        height: number;
-        y: number;
-    },
-    minSpinLoopsCount: number,
-    spinStepDuration: number;
-}
 
 const reelConfig: ReelConfig = {
     width: 100,
