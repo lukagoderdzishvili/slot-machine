@@ -24,8 +24,12 @@ export default class LoaderScene extends BaseScene {
         this._LoadingText = this.make.text({...config.loadingTextConfig});
         this._percentText = this.make.text({...config.percentTextConfig});
 
-        this.load.atlas("images", "/assets/images/images.png", "/assets/images/images.json");
+        this.load.atlas("images", "./assets/images/images.png", "./assets/images/images.json");
+
+        this.load.audio('backgroundMusic', "./assets/audio/backgroundMusic.mp3");
+        this.load.audio("winSound", "./assets/audio/win.mp3");
         
+
 
         this.load.on('progress', (value: number) => {
             this._progressBar.clear();

@@ -6,6 +6,7 @@ import { GameState, SpinResult } from '@/services/gameServer/gameServer.types';
 import Button from '@/components/Button';
 import Reel from '@/components/Reel';
 import { gameData } from '@/data';
+import AudioManager from '@/services/audio/AudioManager';
  
 export default class MainScene extends BaseScene {
     private _container!: Phaser.GameObjects.Container;
@@ -13,12 +14,17 @@ export default class MainScene extends BaseScene {
     private _background!: Phaser.GameObjects.Sprite;
     private _overlay!: Phaser.GameObjects.Rectangle;
     private _spinButton!: Button;
+    private _spinResult!: SpinResult;
     
     constructor() {
         super({ key: 'MainScene' });
     }
 
     public create(): void {
+        gameData.audioManager = new AudioManager(this.game);
+        gameData.audioManager.backgroundMusic.play();
+
+
         this._container = this.add.container(0, 0);
 
         this._createBackground();
@@ -56,8 +62,9 @@ export default class MainScene extends BaseScene {
     private async _playGame(): Promise<void> {
         try {
             this._board.play();
-            const spinResult: SpinResult = await api.playGame();
-            this._board.setSpinResult(spinResult);
+            this._spinResult = await api.playGame();
+
+            this._board.setSpinResult(this._spinResult);
 
 
         } catch (error: unknown) {
@@ -65,7 +72,12 @@ export default class MainScene extends BaseScene {
         }
     }
 
+    private _isWinningSpin(): boolean {
+        return (new Set(this._spinResult.reels).size === 1);
+    }
+
     private _finishGame(): void {
+        if(this._isWinningSpin()) gameData.audioManager?.win.play();
         this._spinButton.enable();
     }
 
