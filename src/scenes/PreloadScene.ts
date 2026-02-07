@@ -28,10 +28,10 @@ export default class PreloadScene extends BaseScene {
         this._container.add([this._titleText, this._startButton]);
 
 
-        this._startButton.on('pointerdown', this._startGame, this);
+        this._startButton.once('pointerdown', this._startGame, this);
     }
 
-    private _startGame(): void {
+    private _startGame(): void {  
         this.fadeToScene('LoaderScene', 500, () => this._container.destroy(true));
     }
 }

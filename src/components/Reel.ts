@@ -15,8 +15,6 @@ export default class Reel extends Phaser.GameObjects.Container {
         super(scene, x, y);
 
         this._createMask();
-
-        scene.add.existing(this);
     }
 
     public play(spinLoops: number, resultIndex: number): void {
@@ -41,13 +39,13 @@ export default class Reel extends Phaser.GameObjects.Container {
             ease: "linear",
             onUpdate: () => this._updateSymbols(),
             onComplete: () => {
-                if(this._state.current <= this._state.total - 1){
-                    if(this._state.resultIndex !== -1 ){
-                        this._state.current += 1;
-                    }
-                }else{
-                    this._state.current += 1;
+                if (
+                    this._state.current > this._state.total - 1 ||
+                    this._state.resultIndex !== -1
+                ) {
+                    this._state.current++;
                 }
+
 
                 if (this._state.current <= this._state.total) {
                     this._spinStep();
@@ -70,7 +68,7 @@ export default class Reel extends Phaser.GameObjects.Container {
                     ? this._getRandomSymbol()
                     : SYMBOLS[this._state.resultIndex];
 
-            bottomSymbol.setTexture(nextTexture);
+            bottomSymbol.setFrame(nextTexture);
 
             this._symbols = [bottomSymbol, topSymbol];
         }
@@ -78,7 +76,10 @@ export default class Reel extends Phaser.GameObjects.Container {
 
     private _finishSpin(finalIndex: number): void {
         const bottomSymbol: Symbol = this._symbols[1];
-        bottomSymbol.setTexture(SYMBOLS[finalIndex]);
+        bottomSymbol.setFrame(SYMBOLS[finalIndex]);
+        
+        
+        this.scene.events.emit("reel:finish", this);
     }
 
     private _getRandomSymbol(): SymbolKey {
@@ -103,8 +104,8 @@ export default class Reel extends Phaser.GameObjects.Container {
 
 
     public setInitialSymbol(currentSymbolID: SymbolID): void {
-        const topSymbol: Symbol = new Symbol(this.scene, config.reelConfig.width / 2,  config.reelConfig.shapeMask.y / 2 - (config.symbolConfig.height * 1.5), this._getRandomSymbol());
-        const bottomSymbol: Symbol = new Symbol(this.scene, config.reelConfig.width / 2, config.reelConfig.shapeMask.y / 2, SYMBOLS[currentSymbolID]);
+        const topSymbol: Symbol = new Symbol(this.scene, config.reelConfig.width / 2,  config.reelConfig.shapeMask.y / 2 - (config.symbolConfig.height * 1.5), "images", this._getRandomSymbol());
+        const bottomSymbol: Symbol = new Symbol(this.scene, config.reelConfig.width / 2, config.reelConfig.shapeMask.y / 2, "images", SYMBOLS[currentSymbolID]);
         
         this._symbols.push(topSymbol, bottomSymbol);
         this._applyMaskToSymbols();
@@ -113,3 +114,4 @@ export default class Reel extends Phaser.GameObjects.Container {
         this.add(this._symbols);
     }
 }
+ 

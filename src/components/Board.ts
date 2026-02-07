@@ -14,8 +14,6 @@ export default class Board extends Phaser.GameObjects.Container {
         super(scene, x, y);
 
         this._create();
-
-        this.scene.add.existing(this);
     }
 
     private _create(): void {
@@ -39,10 +37,10 @@ export default class Board extends Phaser.GameObjects.Container {
     }
 
     private _playBackgroundAnimation(): void{
-        this._background.setTexture("board-active");
+        this._background.setFrame("board-active.png");
         
         gsap.delayedCall(ANIMATION_DURATION, () => {
-            this._background.setTexture("board-default");
+            this._background.setFrame("board-default.png");
         });
     }
 

@@ -5,9 +5,9 @@ export const CENTER_Y: number = gameData.height / 2;
 export const ANIMATION_DURATION: number = 0.3;
 
 export const SYMBOLS = [
-  "symbol1",
-  "symbol2",
-  "symbol3",
+  "symbol1.png",
+  "symbol2.png",
+  "symbol3.png",
 ] as const;
 
 export type SymbolKey = typeof SYMBOLS[number];

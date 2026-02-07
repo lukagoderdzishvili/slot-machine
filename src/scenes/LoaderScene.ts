@@ -24,13 +24,8 @@ export default class LoaderScene extends BaseScene {
         this._LoadingText = this.make.text({...config.loadingTextConfig});
         this._percentText = this.make.text({...config.percentTextConfig});
 
-        this.load.image('background', '/assets/images/background.jpg');
-        this.load.image('board-default', '/assets/images/board-default.png');
-        this.load.image('board-active', '/assets/images/board-active.png');
-        this.load.image('symbol1', '/assets/images/symbol1.png');
-        this.load.image('symbol2', '/assets/images/symbol2.png');
-        this.load.image('symbol3', '/assets/images/symbol3.png');
-
+        this.load.atlas("images", "/assets/images/images.png", "/assets/images/images.json");
+        
 
         this.load.on('progress', (value: number) => {
             this._progressBar.clear();

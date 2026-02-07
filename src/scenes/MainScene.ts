@@ -1,31 +1,45 @@
-import { gameData } from '@/data';
 import BaseScene from './BaseScene';
 import * as config from '@/config/mainScene';
 import Board from '@/components/Board';
 import { api } from '@/services/api';
 import { GameState, SpinResult } from '@/services/gameServer/gameServer.types';
+import Button from '@/components/Button';
+import Reel from '@/components/Reel';
+import { gameData } from '@/data';
  
 export default class MainScene extends BaseScene {
+    private _container!: Phaser.GameObjects.Container;
     private _board!: Board;
     private _background!: Phaser.GameObjects.Sprite;
     private _overlay!: Phaser.GameObjects.Rectangle;
+    private _spinButton!: Button;
     
     constructor() {
         super({ key: 'MainScene' });
-
-        document.addEventListener("keydown", (event: KeyboardEvent) => {
-            if (event.code === "Space") {
-                this._playGame();
-            }
-        });
     }
 
-    create(): void {
+    public create(): void {
+        this._container = this.add.container(0, 0);
+
         this._createBackground();
         this._createBoard();
-        this.playEnterTransition();
+        this._createSpinButton();
 
+        this.playEnterTransition();
         this._initGameState();
+
+        this._addEvents();
+    }
+
+    private _addEvents(): void {
+        this.events.on("reel:finish", (reel: Reel) => {
+            if(reel.parentContainer.getIndex(reel) == gameData.reelsCount) this._finishGame();
+        });
+
+        this._spinButton.onClick(() => {
+            this._spinButton.disable(); 
+            this._playGame();
+        });
     }
 
     private async _initGameState(): Promise<void> {
@@ -51,9 +65,13 @@ export default class MainScene extends BaseScene {
         }
     }
 
+    private _finishGame(): void {
+        this._spinButton.enable();
+    }
+
     private _createBackground(): void {
-        this._background = this.add
-            .sprite(config.backgroundConfig.x, config.backgroundConfig.y, config.backgroundConfig.key)
+        this._background = this.make
+            .sprite({...config.backgroundConfig})
             .setDisplaySize(config.backgroundConfig.displayWidth, config.backgroundConfig.displayHeight);
         
         this._overlay = this.add.rectangle(
@@ -65,9 +83,18 @@ export default class MainScene extends BaseScene {
             config.overlayConfig.alpha
         );
 
+        this._container.add([this._background, this._overlay]);
     }
 
     private _createBoard(): void {
         this._board = new Board(this, config.boardConfig.x, config.boardConfig.y).setScale(config.boardConfig.scale);
+        this._container.add(this._board);
     }
-}
+
+    private _createSpinButton(): void {
+        this._spinButton = new Button(this, config.spinButtonConfig);
+        this._spinButton.enable();
+        
+        this._container.add(this._spinButton);
+    }
+}  
