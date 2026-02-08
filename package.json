@@ -5,7 +5,9 @@
   "main": "main.ts",
   "scripts": {
     "start": "webpack serve --config webpack.config.js",
-    "build": "webpack --config webpack.config.js"
+    "build": "webpack --config webpack.config.js",
+    "start:docker": "docker run -p 8080:80 slot-machine",
+    "build:docker": "docker build -t slot-machine ."
   },
   "repository": {
     "type": "git",
