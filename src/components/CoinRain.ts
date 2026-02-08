@@ -28,6 +28,7 @@ export default class CoinRain {
         this.scene.tweens.add({
             targets: coin,
             y: this.scene.scale.height + 100,
+            ease: "linear",
             duration: Phaser.Math.Between(coinRainConfig.animationDuration.min, coinRainConfig.animationDuration.max),
             onComplete: () => coin.destroy(),
         });
