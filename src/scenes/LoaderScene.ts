@@ -1,8 +1,7 @@
 import * as config from '@/config/loaderScene';
-import { gameData } from '@/data';
 import Phaser from 'phaser';
 import BaseScene from './BaseScene';
-import { CENTER_X } from '@/config/constants';
+import { CENTER_X, SCENE_TRANSITION_DEFAULT_DURATION } from '@/config/constants';
 
 export default class LoaderScene extends BaseScene {
     private _container!: Phaser.GameObjects.Container;
@@ -24,7 +23,7 @@ export default class LoaderScene extends BaseScene {
         this._LoadingText = this.make.text({...config.loadingTextConfig});
         this._percentText = this.make.text({...config.percentTextConfig});
 
-        this.load.atlas("images", "./assets/images/images.png", "./assets/images/images.json");
+        this.load.atlas("images", "./assets/images/images-copmressed.png", "./assets/images/images.json");
 
         this.load.audio('backgroundMusic', "./assets/audio/backgroundMusic.mp3");
         this.load.audio("winSound", "./assets/audio/win.mp3");
@@ -35,6 +34,8 @@ export default class LoaderScene extends BaseScene {
 
         this.load.spineJson("character", "./assets/spine/character/character.json");
         this.load.spineAtlas("character", "./assets/spine/character/character.atlas");
+
+        this.load.image("tt", "./assets/images/11.svg");
 
 
 
@@ -50,6 +51,6 @@ export default class LoaderScene extends BaseScene {
     }
 
     create(): void {
-        this.fadeToScene('MainScene', 750, () => this._container.destroy(true));
+        this.fadeToScene('MainScene', SCENE_TRANSITION_DEFAULT_DURATION * 1.5, () => this._container.destroy(true));
     }
 }
