@@ -13,7 +13,7 @@ export default class Button extends Phaser.GameObjects.Sprite {
     }
 
     public enable(): void {
-        this.setInteractive({ useuseHandCursor: true });
+        this.setInteractive({ cursor: "pointer" });
         this.setFrame(this._config.default_texture);
     }
 
@@ -21,4 +21,13 @@ export default class Button extends Phaser.GameObjects.Sprite {
         this.removeInteractive(); 
         this.setFrame(this._config.disabled_texture);  
     }
+
+    public setEnabledFrame(): void {
+        this.setFrame(this._config.default_texture);
+    }
+
+    public setDisabledFrame(): void {
+        this.setFrame(this._config.disabled_texture);
+    }
+
 } 

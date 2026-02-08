@@ -11,13 +11,14 @@ import CoinRain from '@/components/CoinRain';
 import Character from '@/components/Character';
 import { CENTER_X, CENTER_Y } from '@/config/constants';
 import { CharacterAnimation, characterConfig } from '@/config/mainScene/character.config';
+import ControlPanel from '@/components/ControlPanel';
  
 export default class MainScene extends BaseScene {
     private _container!: Phaser.GameObjects.Container;
     private _board!: Board;
     private _background!: Phaser.GameObjects.Sprite;
     private _overlay!: Phaser.GameObjects.Rectangle;
-    private _spinButton!: Button;
+    private _controlPanel!: ControlPanel;
     private _spinResult!: SpinResult;
 
     private _rain!: CoinRain;
@@ -35,13 +36,12 @@ export default class MainScene extends BaseScene {
         this._createAudioManager();
         this._createBackground();
         this._createBoard();
-        this._createSpinButton();
+        this._createControlPanel();
         this._createCoinRain();
         this._createCharacters();
         
         this.playEnterTransition();
         this._initGameState();
-        this._addEvents();
     }
 
     private async _initGameState(): Promise<void> {
@@ -68,14 +68,6 @@ export default class MainScene extends BaseScene {
         }
     }
 
-    private _addEvents(): void {
-        this._spinButton.onClick(() => {
-            this._spinButton.disable(); 
-            this._playGame();
-        });
-    }
-
-
     private _isWinningSpin(): boolean {
         const reels: number[] = this._spinResult.reels;
         return reels.every(reel => reel === reels[0]);
@@ -86,7 +78,7 @@ export default class MainScene extends BaseScene {
 
         isWin ? this._handleWin() : this._handleLose();
 
-        this._spinButton.enable();
+        this._controlPanel.finishGame();
     }
 
 
@@ -137,11 +129,11 @@ export default class MainScene extends BaseScene {
         this._container.add(this._board);
     }
 
-    private _createSpinButton(): void {
-        this._spinButton = new Button(this, config.spinButtonConfig);
-        this._spinButton.enable();
-        
-        this._container.add(this._spinButton);
+    private _createControlPanel(): void {
+        this._controlPanel = new ControlPanel(this);
+        this._container.add(this._controlPanel);
+
+        this._controlPanel.onPlayCallback(() => this._playGame());
     }
 
     private _createCoinRain(): void {

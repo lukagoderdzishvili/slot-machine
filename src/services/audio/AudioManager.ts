@@ -15,11 +15,11 @@ export default class AudioManager extends Phaser.Sound.BaseSoundManager {
     }
 
     public enable(): void {
-        this.game.sound.mute = false;
+        this.game.sound.setMute(false);
     }
 
     public disable(): void {
-        this.game.sound.mute = true;
+        this.game.sound.setMute(true);
     }
 }
 

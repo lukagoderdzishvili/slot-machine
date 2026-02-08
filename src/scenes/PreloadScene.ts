@@ -23,7 +23,7 @@ export default class PreloadScene extends BaseScene {
             .text({...startButtonConfig})
             .setPadding(padding ?? 0, padding ?? 0)
             .setBackgroundColor(backgroundColor ?? 'transparent')
-            .setInteractive({ useHandCursor: true });
+            .setInteractive({ cursor: "pointer" });
 
         this._container.add([this._titleText, this._startButton]);
 
