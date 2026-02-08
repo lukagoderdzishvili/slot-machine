@@ -3,8 +3,6 @@ import * as config from '@/config/mainScene';
 import Board from '@/components/Board';
 import { api } from '@/services/api';
 import { GameState, SpinResult } from '@/services/gameServer/gameServer.types';
-import Button from '@/components/Button';
-import Reel from '@/components/Reel';
 import { gameData } from '@/data';
 import AudioManager from '@/services/audio/AudioManager';
 import CoinRain from '@/components/CoinRain';

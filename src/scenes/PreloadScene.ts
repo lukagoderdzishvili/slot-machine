@@ -1,6 +1,7 @@
 import BaseScene from './BaseScene';
 import Phaser from 'phaser';
 import  * as config from '@/config/preloadScene';
+import { SCENE_TRANSITION_DEFAULT_DURATION } from '@/config/constants';
 
 export default class PreloadScene extends BaseScene {
     private _container!: Phaser.GameObjects.Container;
@@ -32,6 +33,6 @@ export default class PreloadScene extends BaseScene {
     }
 
     private _startGame(): void {  
-        this.fadeToScene('LoaderScene', 500, () => this._container.destroy(true));
+        this.fadeToScene('LoaderScene', SCENE_TRANSITION_DEFAULT_DURATION, () => this._container.destroy(true));
     }
 }
