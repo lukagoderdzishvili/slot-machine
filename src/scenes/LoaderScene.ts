@@ -29,6 +29,13 @@ export default class LoaderScene extends BaseScene {
         this.load.audio('backgroundMusic', "./assets/audio/backgroundMusic.mp3");
         this.load.audio("winSound", "./assets/audio/win.mp3");
         
+        
+        this.load.spineJson("coin", "./assets/spine/coin/coin-pro.json");
+        this.load.spineAtlas("coin", "./assets/spine/coin/coin-pma.atlas");
+
+        this.load.spineJson("character", "./assets/spine/character/character.json");
+        this.load.spineAtlas("character", "./assets/spine/character/character.atlas");
+
 
 
         this.load.on('progress', (value: number) => {

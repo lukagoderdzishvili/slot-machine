@@ -10,6 +10,7 @@ export default class Reel extends Phaser.GameObjects.Container {
     private _maskShape!: Phaser.GameObjects.Graphics;
     private _mask!: Phaser.Display.Masks.GeometryMask;
     private _state!: SpinState;
+    private _onFinishCallback!: () => void;
 
     constructor(scene: Phaser.Scene, x: number, y: number) {
         super(scene, x, y);
@@ -46,7 +47,6 @@ export default class Reel extends Phaser.GameObjects.Container {
                     this._state.current++;
                 }
 
-
                 if (this._state.current <= this._state.total) {
                     this._spinStep();
                 } else {
@@ -77,9 +77,8 @@ export default class Reel extends Phaser.GameObjects.Container {
     private _finishSpin(finalIndex: number): void {
         const bottomSymbol: Symbol = this._symbols[1];
         bottomSymbol.setFrame(SYMBOLS[finalIndex]);
-        
-        
-        this.scene.events.emit("reel:finish", this);
+
+        this._onFinishCallback && this._onFinishCallback();
     }
 
     private _getRandomSymbol(): SymbolKey {
@@ -112,6 +111,10 @@ export default class Reel extends Phaser.GameObjects.Container {
 
 
         this.add(this._symbols);
+    }
+
+    public onFinish(callback: () => void): void {
+        this._onFinishCallback = callback;
     }
 }
  

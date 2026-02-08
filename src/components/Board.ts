@@ -9,6 +9,7 @@ export default class Board extends Phaser.GameObjects.Container {
 
     private _background!: Phaser.GameObjects.Sprite;
     private _reels: Reel[] = [];
+    private _onFinishCallback!: () => void;
 
     constructor(scene: Phaser.Scene, x: number, y: number) {
         super(scene, x, y);
@@ -30,6 +31,7 @@ export default class Board extends Phaser.GameObjects.Container {
         for (let i = 0; i < gameData.reelsCount; i++) {
             const positionX: number = config.reelConfig.x + (i * config.reelConfig.width  + (i * config.reelConfig.offsetX)); 
             const reel: Reel = new Reel(this.scene, positionX, config.reelConfig.y);
+            if(i === gameData.reelsCount - 1) reel.onFinish(() => this._onFinishCallback());
             this._reels.push(reel);
         }
         
@@ -61,6 +63,12 @@ export default class Board extends Phaser.GameObjects.Container {
         this._reels.forEach((reel: Reel, index: number) => {
             reel.setInitialSymbol(reelsData[index]);
         });
+    }
+
+    public onFinish(callback: () => void): Board {
+        this._onFinishCallback = callback;
+
+        return this;
     }
 
 }

@@ -7,6 +7,10 @@ import Button from '@/components/Button';
 import Reel from '@/components/Reel';
 import { gameData } from '@/data';
 import AudioManager from '@/services/audio/AudioManager';
+import CoinRain from '@/components/CoinRain';
+import Character from '@/components/Character';
+import { CENTER_X, CENTER_Y } from '@/config/constants';
+import { CharacterAnimation, characterConfig } from '@/config/mainScene/character.config';
  
 export default class MainScene extends BaseScene {
     private _container!: Phaser.GameObjects.Container;
@@ -15,37 +19,29 @@ export default class MainScene extends BaseScene {
     private _overlay!: Phaser.GameObjects.Rectangle;
     private _spinButton!: Button;
     private _spinResult!: SpinResult;
+
+    private _rain!: CoinRain;
+    private _leftCharacter!: Character;
+    private _rightCharacter!: Character;
     
     constructor() {
         super({ key: 'MainScene' });
+
     }
-
+    
     public create(): void {
-        gameData.audioManager = new AudioManager(this.game);
-        gameData.audioManager.backgroundMusic.play();
-
-
         this._container = this.add.container(0, 0);
-
+        
+        this._createAudioManager();
         this._createBackground();
         this._createBoard();
         this._createSpinButton();
-
+        this._createCoinRain();
+        this._createCharacters();
+        
         this.playEnterTransition();
         this._initGameState();
-
         this._addEvents();
-    }
-
-    private _addEvents(): void {
-        this.events.on("reel:finish", (reel: Reel) => {
-            if(reel.parentContainer.getIndex(reel) == gameData.reelsCount) this._finishGame();
-        });
-
-        this._spinButton.onClick(() => {
-            this._spinButton.disable(); 
-            this._playGame();
-        });
     }
 
     private async _initGameState(): Promise<void> {
@@ -72,13 +68,48 @@ export default class MainScene extends BaseScene {
         }
     }
 
+    private _addEvents(): void {
+        this._spinButton.onClick(() => {
+            this._spinButton.disable(); 
+            this._playGame();
+        });
+    }
+
+
     private _isWinningSpin(): boolean {
-        return (new Set(this._spinResult.reels).size === 1);
+        const reels: number[] = this._spinResult.reels;
+        return reels.every(reel => reel === reels[0]);
     }
 
     private _finishGame(): void {
-        if(this._isWinningSpin()) gameData.audioManager?.win.play();
+        const isWin: boolean = this._isWinningSpin();
+
+        isWin ? this._handleWin() : this._handleLose();
+
         this._spinButton.enable();
+    }
+
+
+    private _handleWin(): void {
+        gameData.audioManager?.win.play();
+        this._playCharacters(characterConfig.animations.WIN, 2);
+        this._rain.play();
+    }
+
+    private _handleLose(): void {
+        this._playCharacters(characterConfig.animations.LOSE, 1);
+    }
+
+
+    private _playCharacters(animation: CharacterAnimation, repeat: number): void {
+        this._leftCharacter.playAnimation(animation, repeat);
+        this._rightCharacter.playAnimation(animation, repeat);
+    }
+
+
+    private _createAudioManager(): void {
+        gameData.audioManager = new AudioManager(this.game);
+        gameData.audioManager.backgroundMusic.play();
     }
 
     private _createBackground(): void {
@@ -99,7 +130,10 @@ export default class MainScene extends BaseScene {
     }
 
     private _createBoard(): void {
-        this._board = new Board(this, config.boardConfig.x, config.boardConfig.y).setScale(config.boardConfig.scale);
+        this._board = new Board(this, config.boardConfig.x, config.boardConfig.y)
+            .setScale(config.boardConfig.scale)
+            .onFinish(() => this._finishGame());
+
         this._container.add(this._board);
     }
 
@@ -108,5 +142,14 @@ export default class MainScene extends BaseScene {
         this._spinButton.enable();
         
         this._container.add(this._spinButton);
+    }
+
+    private _createCoinRain(): void {
+        this._rain = new CoinRain(this);
+    }
+
+    private _createCharacters(): void {
+        this._leftCharacter = new Character(this, CENTER_X * 0.25, CENTER_Y * 1.85, false);
+        this._rightCharacter = new Character(this, CENTER_X * 1.75, CENTER_Y * 1.85, true);
     }
 }  
