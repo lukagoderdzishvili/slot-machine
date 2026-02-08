@@ -21,6 +21,9 @@
     "url": "https://github.com/lukagoderdzishvili/slot-machine/issues"
   },
   "homepage": "https://github.com/lukagoderdzishvili/slot-machine#readme",
+  "engines": {
+    "node": ">=20"
+  },
   "dependencies": {
     "@esotericsoftware/spine-phaser": "^4.2.76",
     "gsap": "^3.14.2",
