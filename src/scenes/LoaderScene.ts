@@ -31,11 +31,9 @@ export default class LoaderScene extends BaseScene {
         
         this.load.spineJson("coin", "./assets/spine/coin/coin-pro.json");
         this.load.spineAtlas("coin", "./assets/spine/coin/coin-pma.atlas");
-
+ 
         this.load.spineJson("character", "./assets/spine/character/character.json");
         this.load.spineAtlas("character", "./assets/spine/character/character.atlas");
-
-        this.load.image("tt", "./assets/images/11.svg");
 
 
 
